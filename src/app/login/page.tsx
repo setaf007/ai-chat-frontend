@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function Login() {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
@@ -17,11 +18,14 @@ export default function Login() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      if (isLogin) await login(email, password);
-      else await register(email, password);
+      if (isLogin) {
+        await login(email, password);
+      } else {
+        await register(username, email, password);
+      }
       router.push('/dashboard');
-    } catch (e) {
-      alert('Error: ' + e);
+    } catch (e: any) {
+      alert('Error: ' + e.message);
     }
     setLoading(false);
   };
@@ -34,10 +38,27 @@ export default function Login() {
           <CardDescription>Connect to your AI chats</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-          <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+          {!isLogin && (
+            <Input 
+              placeholder="Username" 
+              value={username} 
+              onChange={e => setUsername(e.target.value)} 
+            />
+          )}
+          <Input 
+            placeholder="Email" 
+            type="email"
+            value={email} 
+            onChange={e => setEmail(e.target.value)} 
+          />
+          <Input 
+            type="password" 
+            placeholder="Password" 
+            value={password} 
+            onChange={e => setPassword(e.target.value)} 
+          />
           <div className="flex gap-2">
-            <Button onClick={handleSubmit} disabled={loading} className="flex-1">
+            <Button onClick={handleSubmit} disabled={loading || (!isLogin && !username) || !email || !password} className="flex-1">
               {loading ? 'Loading...' : isLogin ? 'Login' : 'Register'}
             </Button>
             <Button variant="outline" onClick={() => setIsLogin(!isLogin)} className="flex-1">

@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'AI Chat App',
-  description: 'Local AI Chat with FastAPI Backend',
+  description: 'Local AI Chat with FastAPI + LM Studio',
 };
 
 export default function RootLayout({
@@ -18,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>{children}</AuthProvider>
+        <main className="min-h-screen flex flex-col">
+          <AuthProvider>{children}</AuthProvider>
+        </main>
       </body>
     </html>
   );

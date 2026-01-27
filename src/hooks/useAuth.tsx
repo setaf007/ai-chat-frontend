@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 interface AuthContextType {
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  register: (username: string, email: string, password: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -21,22 +21,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    console.log('Login attempt:', { email });  // DEBUG
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
+      method: 'POST',  // ✅ Force POST
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ email, password }),
-    }).then(r => r.json());
+    });
+    
+    console.log('Login response status:', response.status);  // DEBUG
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Login error response:', errorText);  // DEBUG
+      throw new Error(errorText);
+    }
+    
+    const data = await response.json();
+    console.log('Login success data:', data);  // DEBUG
+    
     localStorage.setItem('token', data.access_token);
     setToken(data.access_token);
   };
 
-  const register = async (email: string, password: string) => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
+  const register = async (username: string, email: string, password: string) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ username, email, password }),
     });
-    await login(email, password);  // Auto-login after register
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err);
+    }
+    await login(email, password);  // Auto-login
   };
 
   const logout = () => {
