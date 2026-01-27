@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Chat Frontend (Next.js 15)
 
-## Getting Started
+Beautiful React frontend for local AI Chat API. Connects to FastAPI backend (http://127.0.0.1:8000).
 
-First, run the development server:
+## Features (Phase 3/6)
+- JWT Auth: Login/Register (localStorage)
+- Responsive UI: shadcn/ui + Tailwind + Slate theme
+- API Integration: Your /chats/, /messages/ endpoints
+- Next: Dashboard, Chat list, Streaming messages
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**Portfolio Demo:** Vercel deploy → live chat with your backend.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
+- Next.js 15 (App Router, TypeScript, Turbopack)
+- shadcn/ui (Button, Card, Input, Dialog, etc.)
+- Tailwind CSS v4
+- Axios-like fetch with auth headers
+- React Context for global auth
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Quick Start (Windows)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Backend running: `uvicorn app.main:app --reload` (AI_chat_api/)
+2. ```bash
+   npm install
+   npm run dev
+   ```
+3. http://localhost:3000/login → Register → Dashboard next.
 
-## Learn More
+## Backend Context
+FastAPI + SQLAlchemy + LM Studio (local LLM):
 
-To learn more about Next.js, take a look at the following resources:
+- /register, /login (JWT)
+- /chats/ (list/create)
+- /chats/{id}/messages/ (user → AI reply)
+- /chats/{id}/?include_messages=true (history)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Why: Clear for recruiters/you. Structure, setup, screenshots-ready. Highlights skills (Next.js, TypeScript, API integration).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
