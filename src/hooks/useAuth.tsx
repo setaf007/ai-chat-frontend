@@ -61,6 +61,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     localStorage.removeItem('token');
     setToken(null);
+    // Force clean redirect
+    window.location.href = '/login';
   };
 
   return (
